@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+</head>
+
+<body>
+    <form onsubmit="saveDetails(event)">
+        <label for="name">Name</label>
+        <input type="text" name="name" id="name">
+        <label for="email">Email</label>
+        <input type="email" name="email" id="email">
+        <label for="number">Number</label>
+        <input type="number" name="number" id="number">
+        <button type="submit">Submit</button>
+    </form>
+    <ul id="hello"></ul>
+
+    <script>
+        function saveDetails(event) {
+            event.preventDefault();
+            let name = event.target.name.value; // here name="name"
+            let email = event.target.email.value;
+            let number = event.target.number.value;
+            let obj = { name, email, number };
+
+            //  localStorage can only store strings, you need to convert objects to a JSON string using JSON.stringify() when saving and use JSON.parse() to retrieve the object.
+            let userDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
+            userDetails.push(obj);
+            localStorage.setItem('userDetails', JSON.stringify(userDetails));
+            showDetails(obj);
+        }
+
+        function showDetails(obj) {
+            let show = document.getElementById('hello');
+            show.innerHTML += `<li>${obj.name} - ${obj.email} - ${obj.number}</li>`;
+        }
+
+        function loading() {
+            let userDetails = JSON.parse(localStorage.getItem('userDetails')) || [];
+            userDetails.forEach(obj => showDetails(obj));
+        }
+
+        window.onload = loading;
+    </script>
+</body>
+
+</html>
